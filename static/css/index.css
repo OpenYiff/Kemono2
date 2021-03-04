@@ -348,7 +348,7 @@ a:link {
   background-image: url(/static/fanbox.svg);
   display: inline-block;
   margin-left: 10px;
-  width: 50px;
+  width: 25px;
   height: 25px;
   background-size: contain;
   background-repeat: no-repeat;
@@ -365,7 +365,7 @@ a:link {
 }
 
 .user-header-info-subscribestar {
-  background-image: url(/static/subscribestar.png);
+  background-image: url(/static/subscribestar.svg);
   display: inline-block;
   margin-left: 10px;
   width: 30px;
@@ -375,11 +375,11 @@ a:link {
 }
 
 .user-header-info-dlsite {
-  background-image: url(/static/dlsite.png);
+  background-image: url(/static/dlsite.svg);
   display: inline-block;
   margin-left: 10px;
-  width: 50px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   background-size: contain;
   background-repeat: no-repeat;
 }
