@@ -20,68 +20,11 @@ from markupsafe import Markup
 from bleach.sanitizer import Cleaner
 from hashlib import sha256
 
-from .internals.database.database import get_cursor
-from .internals.cache.flask_cache import cache
-from .utils.utils import make_cache_key, relative_time, delta_key, allowed_file
+from ..internals.database.database import get_cursor
+from ..internals.cache.flask_cache import cache
+from ..utils.utils import make_cache_key, relative_time, delta_key, allowed_file
 
 legacy = Blueprint('legacy', __name__)
-
-@legacy.route('/artists')
-@cache.cached(key_prefix=make_cache_key)
-def artists():
-    props = {
-        'currentPage': 'artists'
-    }
-    base = request.args.to_dict()
-    base.pop('o', None)
-    if not request.args.get('commit'):
-        results = {}
-    else:
-        query = "SELECT * FROM lookup "
-        query += "WHERE name ILIKE %s "
-        params = ('%' + request.args.get('q') + '%',)
-        if request.args.get('service'):
-            query += "AND service = %s "
-            params += (request.args.get('service'),)
-        query += "AND service != 'discord-channel' "
-        query += "ORDER BY " + {
-            'indexed': 'indexed',
-            'name': 'name',
-            'service': 'service'
-        }.get(request.args.get('sort_by'), 'indexed')
-        query += {
-            'asc': ' asc ',
-            'desc': ' desc '
-        }.get(request.args.get('order'), 'asc')
-        query += "OFFSET %s "
-        offset = request.args.get('o') if request.args.get('o') else 0
-        params += (offset,)
-        query += "LIMIT 25"
-
-        cursor = get_cursor()
-        cursor.execute(query, params)
-        results = cursor.fetchall()
-
-        query2 = "SELECT COUNT(*) FROM lookup "
-        query2 += "WHERE name ILIKE %s "
-        params2 = ('%' + request.args.get('q') + '%',)
-        if request.args.get('service'):
-            query2 += "AND service = %s "
-            params2 += (request.args.get('service'),)
-        query2 += "AND service != 'discord-channel'"
-        cursor2 = get_cursor()
-        cursor2.execute(query2, params2)
-        results2 = cursor.fetchall()
-        props["count"] = int(results2[0]["count"])
-        
-    response = make_response(render_template(
-        'artists.html',
-        props = props,
-        results = results,
-        base = base
-    ), 200)
-    response.headers['Cache-Control'] = 's-maxage=60'
-    return response
 
 @legacy.route('/thumbnail/<path:path>')
 def thumbnail(path):
@@ -96,18 +39,6 @@ def thumbnail(path):
         return response
     except Exception as e:
         return f"The file you requested could not be converted. Error: {e}", 404
-
-@legacy.route('/artists/random')
-def random_artist():
-    cursor = get_cursor()
-    query = "SELECT id, service FROM lookup WHERE service != 'discord-channel' ORDER BY random() LIMIT 1"
-    cursor.execute(query)
-    random = cursor.fetchall()
-    if len(random) == 0:
-        return redirect('back')
-    response = redirect(url_for('legacy.user', service = random[0]['service'], id = random[0]['id']))
-    response.autocorrect_location_header = False
-    return response
 
 @legacy.route('/artists/updated')
 @cache.cached(key_prefix=make_cache_key)
@@ -387,16 +318,6 @@ def upload_post():
     response.headers['Cache-Control'] = 's-maxage=60'
     return response
 
-@legacy.route('/posts/random')
-def random_post():
-    cursor = get_cursor()
-    query = "SELECT service, \"user\", id FROM posts WHERE random() < 0.01 LIMIT 1"
-    cursor.execute(query)
-    random = cursor.fetchall()
-    response = redirect(url_for('post', service = random[0]['service'], id = random[0]['user'], post = random[0]['id']))
-    response.autocorrect_location_header = False
-    return response
-
 # TODO: /:service/user/:id/rss
 
 @legacy.route('/config/set', methods=["POST"])
@@ -619,7 +540,7 @@ def post_prev(service, id, post):
     if not prev_result:
         response = redirect(request.headers.get('Referer') if request.headers.get('Referer') else '/')
     else:
-        response = redirect(url_for('post', service = prev_result['service'], id = prev_result['user'], post = prev_result['id']))
+        response = redirect(url_for('legacy.post', service = prev_result['service'], id = prev_result['user'], post = prev_result['id']))
         response.autocorrect_location_header = False
 
     return response
@@ -657,7 +578,7 @@ def post_next(service, id, post):
     if not prev_result:
         response = redirect(request.headers.get('Referer') if request.headers.get('Referer') else '/')
     else:
-        response = redirect(url_for('post', service = prev_result['service'], id = prev_result['user'], post = prev_result['id']))
+        response = redirect(url_for('legacy.post', service = prev_result['service'], id = prev_result['user'], post = prev_result['id']))
         response.autocorrect_location_header = False
 
     return response

@@ -45,3 +45,4 @@ webencodings==0.5.1
 Werkzeug==1.0.1
 wrapt==1.12.1
 redis==3.5.3
+ujson==4.0.2

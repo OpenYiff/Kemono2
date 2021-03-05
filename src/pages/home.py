@@ -1,7 +1,7 @@
 from flask import Blueprint, request, make_response, render_template
 
-from .utils.utils import make_cache_key
-from .internals.cache.flask_cache import cache
+from ..utils.utils import make_cache_key
+from ..internals.cache.flask_cache import cache
 
 home = Blueprint('home', __name__)
 

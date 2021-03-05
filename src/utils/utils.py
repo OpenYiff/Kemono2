@@ -52,3 +52,18 @@ def delta_key(e):
 
 def allowed_file(mime, accepted):
     return any(x in mime for x in accepted)
+
+def get_value(d, key, default = None):
+    if key in d:
+        return d[key]
+    return default
+
+def is_url_path_for_file(path):
+    parts = path.split('/')
+    if len(parts) == 0:
+        return False
+    try:
+        parts[-1].index('.')
+        return True
+    except ValueError:
+        return False
