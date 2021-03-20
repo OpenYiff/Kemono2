@@ -1,3 +1,10 @@
+# front-end
+/client
+node_modules
+
+# VSCode workspaces
+*.code-workspace
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
