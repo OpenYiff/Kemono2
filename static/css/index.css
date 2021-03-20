@@ -1,3 +1,11 @@
+/* CSS variables */
+/* not in use until migrating to webpack */
+:root {
+  --colour0-primary: hsl(0, 0%, 90%);
+  --colour0-secondary: hsl(210, 6%, 12%);
+}
+/* CSS variables END */
+
 html {
   background: #1d1f21
 }
@@ -69,6 +77,7 @@ a:link {
 
 .views {
   display: flex;
+  gap: 2em;
 }
 
 .vertical-views {

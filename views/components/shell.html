@@ -2,18 +2,33 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta 
+      name="viewport" 
+      content="width=device-width, initial-scale=1"
+    >
     <title>Kemono</title>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css@8.0.1/normalize.css">
-    <!-- TODO: Replace push notifications with Python library -->
-    <!--<meta name="push_key" content="${process.env.VAPID_PUBLIC_KEY}"/>-->
+    <link 
+      rel="stylesheet" 
+      type="text/css" 
+      href="{{ url_for('static', filename='css/normalize.css') }}"
+    >
+    {# TODO: Replace push notifications with Python library #}
+    {# <meta name="push_key" content="${process.env.VAPID_PUBLIC_KEY}"/>s #}
     {% if props.compatibility %}
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/compatibility.css') }}">
+      <link 
+        rel="stylesheet" 
+        type="text/css" 
+        href="{{ url_for('static', filename='css/compatibility. css') }}"
+      >
     {% else %}
       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
     {% endif %}
     {% if props.discord %}
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/discord.css') }}">
+      <link 
+        rel="stylesheet" 
+        type="text/css" 
+        href="{{ url_for('static', filename='css/discord.css') }}"
+      >
     {% endif %}
     {% if props.service %}
       <meta name="service" content="{{ props.service }}"/>
@@ -33,10 +48,20 @@
     {% endif %}
   </head>
   <body>
-    <div class="main" id="main">
-      {% include 'components/header.html' %}
+    <header class="global-header">
+      <ul class="header">
+        <li {{ 'class="current-page"'|safe if props.currentPage == 'artists' }}><a href="/">Artists</a></li>
+        <li {{ 'class="current-page"'|safe if props.currentPage == 'posts' }}><a href="/posts">Posts</a></li>
+        <li {{ 'class="current-page"'|safe if props.currentPage == 'import' }}><a href="/importer">Import</a></li>
+        <li {{ 'class="current-page"'|safe if props.currentPage == 'requests' }}><a href="/requests">Requests</a></li>
+        <li><a href="https://board.kemono.party/kemono" target="_blank">Board</a></li>
+        <li {{ 'class="current-page"'|safe if props.currentPage == 'help' }}><a href="/help">Help</a></li>
+      </ul>
+      {# TODO: move it into this file #}
       {% include 'components/subheader.html' %}
+    </header>
+    <main class="main" id="main">
       {% block content %}{% endblock %}
-    </div>
+    </main>
   </body>
 </html>

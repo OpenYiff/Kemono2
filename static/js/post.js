@@ -11,6 +11,20 @@ function attemptFlag (_, api) {
   const pathname = window.location.pathname.split('/');
   const resultsView = document.getElementById('results');
   let cacheApi, flagApi;
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
   switch (document.getElementsByName('service')[0].content) {
     case 'patreon': {
       cacheApi = `/api/lookup/cache/${pathname[3]}?service=patreon`;
@@ -38,9 +52,32 @@ function attemptFlag (_, api) {
     }
   }
 
+  // TODO: use date-fns after migrating to webpack
+  const publishedAt = !document.getElementsByName('published').length 
+    ? undefined
+    : new Date(document.getElementsByName('published')[0].content);
+
+  const addedAt = !document.getElementsByName('added').length 
+    ? undefined  
+    : new Date(document.getElementsByName('added')[0].content);
+
+  const publishedAtFormatted = !publishedAt
+    ? "unknown"
+    : `${publishedAt.getDate()} 
+      ${months[publishedAt.getMonth()]} 
+      ${publishedAt.getFullYear()}`;
+
+  const addedAtFormatted = !addedAt
+    ? "unknown"
+    : `${addedAt.getDate()} 
+      ${months[addedAt.getMonth()]} 
+      ${addedAt.getFullYear()}`;
+    
+
   fetch(cacheApi)
     .then(function (data) { return data.json(); })
     .then(function (cache) {
+      
       resultsView.innerHTML += `
         <li>
           User: <a href="../">${cache.name}</a>
@@ -49,10 +86,18 @@ function attemptFlag (_, api) {
           ID: <a href="">${document.getElementsByName('id')[0].content}</a>
         </li>
         <li>
-          ${document.getElementsByName('published').length ? `Published at: ${new Date(document.getElementsByName('published')[0].content).toISOString()}` : ''}
+          <time 
+            datetime=${publishedAt.toISOString()}
+          >
+            Published at: ${publishedAtFormatted}
+          </time>
         </li>
         <li>
-          ${document.getElementsByName('added').length ? `Added at: ${new Date(document.getElementsByName('added')[0].content).toISOString()}` : ''}
+          <time
+            datetime=${addedAt.toISOString()}
+          >
+            Added at: ${addedAtFormatted}
+          </time>
         </li>
       `;
     })

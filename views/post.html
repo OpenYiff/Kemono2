@@ -1,9 +1,10 @@
 {% extends 'components/shell.html' %}
 {% block content %}
 <div class="views">
-  <div class="sidebar" style="margin-right: 20px;">
-    <span class="subtitle">Click on the thumbnails to reveal the original resolution image.</span>
+  <div class="sidebar">
+    <p class="subtitle">Click on the thumbnails to reveal the original resolution image.</p>
     <h1>Information</h1>
+    {# TODO: pull the info from the script to template #}
     <div class="results" id="results"></div>
     <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/unfetch@4.1.0/polyfill/index.js"></script>
