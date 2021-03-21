@@ -7,25 +7,44 @@
 /* CSS variables END */
 
 html {
+  box-sizing: border-box;
   background: #1d1f21
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  transition-property: opacity;
+  transition-duration: 250ms;
+}
+
+*:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .sidebar h1 {
   font-size: 1.16667em;
 }
 
+section {
+  padding: 1em;
+}
+
 h1, h2, h3, label {
   font-family: Tahoma;
 }
 
-textarea {
-  width: calc(100% - 2px);
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  min-height: 3rem;
-  background: #4c4f57;
+h1 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 2.2rem;
+  padding: 0.25em;
+  margin: 0;
 }
+
+
 
 pre {
   white-space: pre-wrap;       /* Since CSS 2.1 */
@@ -159,23 +178,55 @@ a:link {
   word-break: break-word;
 }
 
+label {
+  cursor: pointer;
+}
+
+/* a hack to overwrite its cursor */
+*:disabled label{
+  cursor: not-allowed;
+}
+
 select {
-  background-image: linear-gradient(#282a2e, #111111);
-  border-color: #111;
+  background-image: linear-gradient(
+    hsl(220, 7%, 17%), 
+    hsl(0, 0%, 7%)
+  );
+  border-color: hsl(0, 0%, 7%);
   border-radius: 5px;
   text-align-last: center;
+  cursor: pointer;
 }
 
 select::-ms-expand {
   color: #000;
 }
 
-input[type="text"], input[type="number"] {
+input[type="radio"],
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+input[type="text"], 
+input[type="number"] {
   border-radius: 5px;
   background: #4c4f57;
   color: #fff;
-  text-align: center;
+  /* text-align: center; */
   border: 0;
+}
+
+textarea {
+  width: calc(100% - 2px);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  min-height: 3rem;
+  background: #4c4f57;
+}
+
+button {
+  cursor: pointer;
 }
 
 /* headers */
@@ -192,7 +243,8 @@ input[type="text"], input[type="number"] {
   margin: 0 1em 0 0;
 }
 
-.subheader li a:visited, .subheader li a:link {
+.subheader li a:visited, 
+.subheader li a:link {
   color: #fff;
 }
 
@@ -208,7 +260,8 @@ input[type="text"], input[type="number"] {
   margin: 0 1em 0 0;
 }
 
-.header li a:visited, .header li a:link {
+.header li a:visited, 
+.header li a:link {
   color: #fff;
 }
 
@@ -295,41 +348,202 @@ input[type="submit"] {
   }
 }
 
+/* Forms */
+/* doing wrapper because input elements can't have pseudo-elements */
+.input-wrapper {
+  /* default value */
+  position: relative
+}
+
+.input-wrapper--money {
+  --input-currency: "$";
+}
+
+.input-wrapper--money::before {
+  position: absolute;
+  left: 0.5em;
+  content: var(--input-currency);
+  transform: translateY(55%);
+}
+
+/* quick hack to place text after tje symbol */
+.input-wrapper--money .form__input {
+  padding-left: 1.5em;
+}
+/* END Forms */
+
 /* search forms */
 
-.search-form {
-  display: table;
-  margin: 0 0 1em;
-  padding: .5rem;
-  margin-left: 5px;
+.form {
+  /* TODO: replace with variable later */
+  max-width: 360px;
   background-color: #282a2e;
+  padding: 1em;
+  margin: 0 auto;
 }
 
-.search-form > div {
-  display: table-row;
-  line-height: 1.5em;
-  margin-bottom: 2em;
+/* when search-search from is the only thing on page */
+.form--full-page {
+  /* TODO: replace with variable later */
+  max-width: 720px;
 }
 
-.search-form small {
-  line-height: normal;
+.form__fieldset,
+.form__section {
+  border-color: transparent;
+  padding-bottom: 1em;
 }
 
-.search-form label, .search-form input {
-  display: table-cell;
-  padding-right: 1em;
-  white-space: nowrap;
+.form__section--hidden {
+  opacity: 0;
+  visibility: hidden;
+  max-height: 0;
+  padding: 0;
+}
+
+.form__options {
+  border: transparent;
+  padding: 0 0 1em;
+  transition-property: opacity, visibility, max-height;
+  transition-duration: 250ms;
+}
+
+.form__options--hidden {
+  opacity: 0;
+  visibility: hidden;
+  max-height: 0;
+  padding: 0;
+}
+
+.form__section--fieldset {
+  /* hack for weird padding calc in fieldsets */
+  margin-bottom: 1em;
+}
+
+/* TODO: fluff up radios and checkboxes */
+.form__section--radio {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 1em;
+}
+
+.form__section--file {
+  position: relative;
+}
+
+.form__section--file .form__input {
+  position: absolute;
+  z-index: -1;
+  width: 1;
+  height: 1;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.form__section--file .form__label {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  background-image: linear-gradient(
+    hsl(220, 7%, 17%), 
+    hsl(0, 0%, 7%)
+  );
+  border-radius: 5px;
+  padding: 0.5em;
+}
+
+/* TODO: focus style when input gets focused */
+/* .form__section--file .form__input:focus + .form__label {
+  outline-width: 1px;
+  outline-color: hsl(0, 0%, 90%);
+  outline-offset: 1px;
+} */
+
+.form__fieldset:last-child,
+.form__section:last-child {
+  padding-bottom: 0;
+}
+
+.form__legend {
+  padding: 0.5em;
+}
+
+/* TODO: rewrite them as generic selectors */
+.form__input,
+.form__button,
+.form__select, 
+.form__text-area {
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 44px;
+  width: 100%;
+  border-radius: 5px;
+  padding: 0.5em;
+}
+
+.form__input--text {
   text-align: left;
+  color: hsl(0, 0%, 90%);
+  background: hsl(224, 7%, 32%);
 }
 
-.search-form label {
-  text-align: right;
-  font-weight: 700;
+.form__input--radio {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: auto;
+  border-radius: 50%;
+  border: 0.125em solid hsl(0, 0%, 90%);
+  transition: 250ms all linear;
+  padding: 0;
 }
 
-.search-form small {
+.form__input--radio:checked {
+  border: 0.75em solid hsl(0, 0%, 90%);
+}
+
+.form__input--money {
+  --input-currency: "$";
+}
+
+.form__input--money::before {
+  content: var(--input-currency);
+}
+
+.form__subtitle {
   display: block;
+  line-height: normal;
+  color: hsl(0, 0%, 45%);
 }
+
+.form__label {
+  text-align: right;
+  font-weight: bold;
+}
+
+/* .form__select {} */
+
+/* .form__button {} */
+
+.form__button--button {
+  background-image: linear-gradient(
+    #282a2e, 
+    #111111
+  );
+  border: 0;
+}
+
+.form__button--submit {
+  background-image: linear-gradient( 
+  #111111,
+  #282a2e
+  );
+  border: 0;
+}
+
+/* END search forms */
 
 /* search results */
 .search-results {

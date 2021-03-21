@@ -1,52 +1,127 @@
 {% extends 'components/shell.html' %}
+
+{% block scripts_extra %}
+  {# TODO: remove these webpack integration #}
+  {% if results|length %}
+    <script src="https://unpkg.com/unfetch@4.1.0/polyfill/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
-  <div class="page" id="page">
+  <h1>Artists list</h1>
+  <section class="page artists-list" id="page">
     <form
+      class="form"
       autocomplete="off"
-      class="search-form"
       novalidate="novalidate"
       action="/"
       accept-charset="UTF-8"
       method="get"
       onsubmit="return (typeof submitted == 'undefined') ? (submitted = true) : !submitted"
     >
-      <div>
-        <label for="q">Name</label>
+
+      <div class="form__section">
+        <label 
+          class="form__label" 
+          for="q"
+        >
+          Name
+        </label>
         <input
+          id="q"
+          class="form__input"
+          class=""
           type="text"
           name="q"
-          id="q"
           autocomplete="off"
           value="{{ request.args.get('q') if request.args.get('q') }}"
         >
-        <small class="subtitle" style="margin-left: 5px;">Leave blank to list all</small>
+        <small class="form__subtitle">
+          Leave blank to list all
+        </small>
       </div>
-      <div>
-        <label for="service">Service</label>
-        <select id="service" name="service">
-          <option value="">All</option>
-          <option value="patreon" {{ 'selected' if request.args.get('service') == 'patreon' }}>Patreon</option>
-          <option value="fanbox" {{ 'selected' if request.args.get('service') == 'fanbox' }}>Pixiv Fanbox</option>
-          <option value="gumroad" {{ 'selected' if request.args.get('service') == 'gumroad' }}>Gumroad</option>
-          <option value="subscribestar" {{ 'selected' if request.args.get('service') == 'subscribestar' }}>SubscribeStar</option>
-          <option value="discord" {{ 'selected' if request.args.get('service') == 'discord' }}>Discord</option>
-          <option value="dlsite" {{ 'selected' if request.args.get('service') == 'dlsite' }}>DLsite</option>
-        </select>
+      
+      <div class="form__section">
+        <button 
+          type="button"
+          class="form__button form__button--button" 
+        >
+          Options
+        </button>
       </div>
-      <div>
-        <label for="sort_by">Sort by</label>
-        <select id="sort_by" name="sort_by">
-          <option value="indexed" {{ 'selected' if request.args.get('sort_by') == 'indexed' }}>Date Indexed</option>
-          <option value="name" {{ 'selected' if request.args.get('sort_by') == 'name' }}>Alphabetical Order</option>
-          <option value="service" {{ 'selected' if request.args.get('sort_by') == 'service' }}>Service</option>
-        </select>
-        <select name="order">
-          <option value="asc">Ascending</option>
-          <option value="desc" {{ 'selected' if request.args.get('order') == 'desc'}}>Descending</option>
-        </select>
+
+      <fieldset
+        class="form__options form__options--hidden"
+      >
+        <div class="form__section">
+          <label class="form__label" for="service">Service</label>
+          <select 
+            id="service"
+            class="form__select"
+            name="service"
+          >
+            <option value="">All</option>
+            <option value="patreon" {{ 'selected' if request.args.get('service') == 'patreon' }}>Patreon</option>
+            <option value="fanbox" {{ 'selected' if request.args.get('service') == 'fanbox' }}>Pixiv Fanbox</option>
+            <option value="gumroad" {{ 'selected' if request.args.get('service') == 'gumroad' }}>Gumroad</option>
+            <option value="subscribestar" {{ 'selected' if request.args.get('service') == 'subscribestar' }}>SubscribeStar</option>
+            <option value="discord" {{ 'selected' if request.args.get('service') == 'discord' }}>Discord</option>
+            <option value="dlsite" {{ 'selected' if request.args.get('service') == 'dlsite' }}>DLsite</option>
+          </select>
+        </div>
+
+        <div class="form__section">
+          <label
+            class="form__label"
+            for="sort_by"
+          >
+            Sort by
+          </label>
+          <select 
+            id="sort_by"
+            class="form__select"
+            name="sort_by"
+          >
+            <option value="indexed" {{ 'selected' if request.args.get('sort_by') == 'indexed' }}>Date Indexed</option>
+            <option value="name" {{ 'selected' if request.args.get('sort_by') == 'name' }}>Alphabetical Order</option>
+            <option value="service" {{ 'selected' if request.args.get('sort_by') == 'service' }}>Service</option>
+          </select>
+          
+        </div>
+
+        <div class="form__section">
+          <label
+            class="form__label"
+            for="sort-order"
+          >
+            Order
+          </label>
+          <select
+            id="sort-order"
+            class="form__select" 
+            name="order"
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc" {{ 'selected' if request.args.get('order') == 'desc'}}>Descending</option>
+          </select>
+        </div>
+      </fieldset>
+
+
+
+      <div class="form__section">
+        <button 
+          type="submit"
+          class="form__button form__button--submit"
+          name="commit" 
+          data-disable-with="Search">
+          Search
+        </button>
       </div>
-      <input type="submit" name="commit" value="Search" data-disable-with="Search">
+      
     </form>
+
     <div class="vertical-views">
       {% if results|length %}
         <div class="paginator" id="paginator-top">
@@ -104,10 +179,6 @@
         </div>
       {% endif %}
     </div>
-  </div>
-  {% if results|length %}
-    <script src="https://unpkg.com/unfetch@4.1.0/polyfill/index.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
-    <script src="{{ url_for('static', filename='js/artists.js') }}"></script>
-  {% endif %}
+  </section>
+  
 {% endblock %}

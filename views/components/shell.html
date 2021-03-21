@@ -7,11 +7,18 @@
       content="width=device-width, initial-scale=1"
     >
     <title>Kemono</title>
+    {# <link 
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="{{ url_for('static', filename='favicon.ico') }}" 
+    > #}
     <link 
       rel="stylesheet" 
       type="text/css" 
       href="{{ url_for('static', filename='css/normalize.css') }}"
     >
+    {# {% block svg_container %}
+    {% endblock %} #}
     {# TODO: Replace push notifications with Python library #}
     {# <meta name="push_key" content="${process.env.VAPID_PUBLIC_KEY}"/>s #}
     {% if props.compatibility %}
@@ -46,6 +53,13 @@
       <meta name="added" content="{{ props.posts.added }}"/>
       <meta name="id" content="{{ props.posts.id }}"/>
     {% endif %}
+    {% block scripts %}
+      <script 
+      src="{{ url_for('static', filename='js/main.js') }}" 
+      defer
+    ></script>
+    {% endblock %}
+    {% block scripts_extra %}{% endblock %}
   </head>
   <body>
     <header class="global-header">

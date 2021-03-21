@@ -1,17 +1,18 @@
 {% extends 'components/shell.html' %}
 {% block content %}
-<div class="page" id="page">
-  <h1>Upload file</h1>
-  <p>
-    If content for a user is distributed by means inaccessible by the <a href="/importer">importers,</a> (like email or private message) you can upload the files manually here.
-  </p>
+<h1>Upload a file</h1>
+<section class="page post-upload" id="page">
+  
   <form
-    class="search-form bbs-reply"
+    class="form form--full-page"
     action="/api/upload"
     enctype="multipart/form-data"
     method="post"
     onsubmit="return (typeof submitted == 'undefined') ? (submitted = true) : !submitted"
   >
+    <p>
+      If content for a user is distributed by means inaccessible by the <a href="/importer">importers</a> (like email or private message), you can upload the files manually here.
+    </p>
     {% if request.args.get('service') %}
       <div>
         <input
@@ -21,9 +22,18 @@
         >
       </div>
     {% else %}
-      <div>
-        <label for="service">Service</label>
-        <select id="service" name="service">
+      <div class="form__section" >
+        <label 
+          class="form__label" 
+          for="service"
+        >
+          Service
+        </label>
+        <select 
+          id="service" 
+          class="form__select" 
+          name="service"
+        >
           <option value="patreon" selected>Patreon</option>
           <option value="fanbox">Pixiv Fanbox</option>
           <option value="gumroad">Gumroad</option>
@@ -42,51 +52,88 @@
         >
       </div>
     {% else %}
-      <div>
-        <label for="user">User ID</label>
+      <div class="form__section">
+        <label 
+          class="form__label" 
+          for="user"
+        >
+          User ID
+        </label>
         <input 
+          id="user"
+          class="form__input"
           type="text"
           name="user"
-          id="user"
           required
         >
       </div>
     {% endif %}
     
-    <div>
-      <label for="title">Title</label>
+    <div class="form__section">
+      <label 
+        class="form__label" 
+        for="title"
+      >
+        Title
+      </label>
       <input 
+        id="title"
+        class="form__input"
         type="text"
         name="title"
-        id="title"
         maxlength="50"
         required
-        placeholder="&quot;February 2016 Rewards&quot;"
       >
+      <small class="form__subtitle">
+        "February 2016 Rewards"
+      </small>
     </div>
-    <div>
-      <label for="content">Description</label>
+
+    <div class="form__section">
+      <label 
+        class="form__label" for="content"
+      >
+        Description
+      </label>
+      <small class="form__subtitle">
+        Specify what the file/archive is, where the original post can be found, include relevant keys/passwords, etc.
+      </small>
       <textarea
-        name="content"
         id="content"
+        class="form__text-area"
+        name="content"
         maxlength="5000"
         cols="48"
         rows="4"
         wrap="soft"
-        placeholder="Specify what the file/archive is, where the original post can be found, include relevant keys/passwords, etc."
       ></textarea>
     </div>
-    <div>
-      <label for="file">File</label>
+
+    <div 
+      class="form__section form__section--file"
+    >
       <input
         id="file"
+        class="form__input"
         type="file"
         name="file"
         required
-      />
-      <small class="subtitle" style="margin-left: 5px;">2GB size limit</small>
+      >
+      <label 
+        class="form__label" 
+        for="file"
+      >
+        File (2GB size limit)
+      </label>
     </div>
-    <input type="submit"/>
+    <div class="form__section">
+      <button
+        class="form__button form__button--submit"
+        type="submit"
+      >
+        Submit
+      </button>
+    </div>
   </form>
 </div>
 {% endblock %}

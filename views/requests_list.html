@@ -1,69 +1,175 @@
 {% extends 'components/shell.html' %}
 {% block content %}
-<div class="page" id="page">
+<h1>Requests list</h1>
+<section class="page requests-list" id="page" >
   <form
     autocomplete="on"
-    class="search-form"
+    class="form"
     novalidate="novalidate"
     action="/requests"
     method="get"
     onsubmit="return (typeof submitted == 'undefined') ? (submitted = true) : !submitted"
   >
-    <div>
-      <label for="q">Title</label>
+    <div class="form__section" >
+      <label
+        class="form__label"
+        for="q"
+      >
+        Title
+      </label>
       <input
+        class="form__input form__input--text"
         type="text"
         name="q"
         id="q"
         autocomplete="off"
         value="{{ request.args.get('q') if request.args.get('q') }}"
       >
-      <small class="subtitle" style="margin-left: 5px;">Leave blank to list all.</small>
+      <small class="form__subtitle">Leave blank to list all.</small>
     </div>
-    <div>
-      <label for="service">Service</label>
-      <select id="service" name="service">
-        <option value="">All</option>
-        <option value="patreon" {{ 'selected' if request.args.get('service') == 'patreon' }}>Patreon</option>
-        <option value="fanbox" {{ 'selected' if request.args.get('service') == 'fanbox' }}>Pixiv Fanbox</option>
-        <option value="gumroad" {{ 'selected' if request.args.get('service') == 'gumroad' }}>Gumroad</option>
-        <option value="subscribestar" {{ 'selected' if request.args.get('service') == 'subscribestar' }}>SubscribeStar</option>
-        <option value="discord" {{ 'selected' if request.args.get('service') == 'discord' }}>Discord</option>
-        <option value="dlsite" {{ 'selected' if request.args.get('service') == 'dlsite' }}>DLsite</option>
-      </select>
+
+    <div class="form__section">
+      <button 
+        class="form__button form__button--button" 
+        type="button"
+      >
+        Options
+      </button>
     </div>
-    <div>
-      <label for="sort_by">Sort by</label>
-      <select id="sort_by" name="sort_by">
-        <option value="votes">Votes</option>
-        <option value="created" {{ 'selected' if request.args.get('sort_by') == 'created' }}>Date posted</option>
-        <option value="price" {{ 'selected' if request.args.get('sort_by') == 'price' }}>Price</option>
-      </select>
-      <select name="order">
-        <option value="asc" {{ 'selected' if request.args.get('order') == 'asc' }}>Ascending</option>
-        <option value="desc" {{ 'selected' if request.args.get('order') == 'desc' or request.args.get('order') is none }}>Descending</option>
-      </select>
+
+    <fieldset
+      class="form__options form__options--hidden"
+    >
+      <div class="form__section" >
+        <label 
+          for="service" 
+          class="form__label"
+        >
+          Service
+        </label>
+        <select 
+          id="service" class="form__select" name="service"
+        >
+          <option value="">All</option>
+          <option value="patreon" {{ 'selected' if request.args.get('service') == 'patreon' }}>Patreon</option>
+          <option value="fanbox" {{ 'selected' if request.args.get('service') == 'fanbox' }}>Pixiv Fanbox</option>
+          <option value="gumroad" {{ 'selected' if request.args.get('service') == 'gumroad' }}>Gumroad</option>
+          <option value="subscribestar" {{ 'selected' if request.args.get('service') == 'subscribestar' }}>SubscribeStar</option>
+          <option value="discord" {{ 'selected' if request.args.get('service') == 'discord' }}>Discord</option>
+          <option value="dlsite" {{ 'selected' if request.args.get('service') == 'dlsite' }}>DLsite</option>
+        </select>
+      </div>
+
+      <div class="form__section" >
+        <label for="sort_by" class="form__label">
+          Sort by
+        </label>
+        <select class="form__select" id="sort_by" name="sort_by">
+          <option value="votes">Votes</option>
+          <option value="created" {{ 'selected' if request.args.get('sort_by') == 'created' }}>Date posted</option>
+          <option value="price" {{ 'selected' if request.args.get('sort_by') == 'price' }}>Price</option>
+        </select>
+      </div>
+
+      <div class="form__section">
+        <label for="order" class="form__label">
+          Order
+        </label>
+        <select id="order" class="form__select" name="order">
+          <option value="asc" {{ 'selected' if request.args.get('order') == 'asc' }}>Ascending</option>
+          <option value="desc" {{ 'selected' if request.args.get('order') == 'desc' or request.args.get('order') is none }}>Descending</option>
+        </select>
+      </div>
+
+      <fieldset 
+        class="form__section form__section--fieldset"
+      >
+        <legend class="form__legend">Status</legend>
+
+        <div class="form__section form__section--radio">
+          <input 
+            id="status-open"
+            class="form__input form__input--radio"
+            type="radio" 
+            name="status" 
+            value="open" {{ 'checked' if request.args.get('status') == 'open' or request.args.get('status') is none }}
+          >
+          <label for="status-open" class="form__label">
+            Open
+          </label>
+        </div>
+
+        <div class="form__section form__section--radio">
+          <input 
+            id="status-fulfilled"
+            class="form__input form__input--radio" 
+            type="radio" 
+            name="status" 
+            value="fulfilled" {{ 'checked' if request.args.get('status') == 'fulfilled' }}
+          >
+          <label for="status-fulfilled" class="form__label">
+            Fulfilled
+          </label>
+        </div>
+
+        <div class="form__section form__section--radio">
+          <input 
+            id="status-closed"
+            class="form__input form__input--radio" 
+            type="radio" 
+            name="status" 
+            value="closed" {{ 'checked' if request.args.get('status') == 'closed' }}
+          >
+          <label for="status-closed" class="form__label">
+            Closed
+          </label>
+        </div>
+
+      </fieldset>
+
+      <div class="form__section" >
+        <label for="max_price">Max Price</label>
+        <div 
+          class="input-wrapper input-wrapper--money"
+          style="--input-currency: '$';"
+        >
+          <input
+            id="max_price"
+            class="form__input"
+            type="number"
+            name="max_price"
+            min="0"
+            max="10000"
+            step="0.01"
+            value="{{ request.args.get('max_price') }}"
+            required
+          >
+          {# <datalist id="money-list">
+            <option value="10">
+            <option value="50">
+            <option value="100">
+            <option value="500">
+            <option value="1000">
+            <option value="5000">
+            <option value="10000">
+          </datalist> #}
+        </div>
+
+      </div>
+
+    </fieldset>
+    
+    <div class="form__section" >
+      <button 
+        type="submit"
+        class="form__button form__button--submit" 
+        name="commit" 
+        data-disable-with="Search"
+      >
+        Search
+      </button>
     </div>
-    <div>
-      <label for="status">Status</label>
-      <input type="radio" name="status" value="open" style="margin-right:5px" {{ 'checked' if request.args.get('status') == 'open' or request.args.get('status') is none }}>Open
-      <input type="radio" name="status" value="fulfilled" style="margin-right:5px" {{ 'checked' if request.args.get('status') == 'fulfilled' }}>Fulfilled
-      <input type="radio" name="status" value="closed" style="margin-right:5px" {{ 'checked' if request.args.get('status') == 'closed' }}>Closed
-    </div>
-    <div>
-      <label for="max_price">Max Price</label>
-      $ <input
-          id="max_price"
-          name="max_price"
-          type="number"
-          min="0.00"
-          max="10000.00"
-          step="0.01"
-          value="{{ request.args.get('max_price') }}"
-          required
-        />
-    </div>
-    <input type="submit" name="commit" value="Search" data-disable-with="Search">
+    
   </form>
   <div class="vertical-views">
     <div class="paginator" id="paginator-top">
@@ -171,6 +277,6 @@
       {% include 'components/paginator.html' %}
     </div>
   </div>
-</div>
-<script src="{{ url_for('static', filename='js/swreg.js') }}"></script>
+</section>
+{# <script src="{{ url_for('static', filename='js/swreg.js') }}"></script> #}
 {% endblock %}
