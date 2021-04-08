@@ -10,7 +10,7 @@ pool = None
 
 def init():
     global pool
-    pool = redis.ConnectionPool(host=getenv('REDIS_HOST'), port=getenv('REDIS_PORT'))
+    pool = redis.ConnectionPool(host=getenv('REDIS_HOST'), port=getenv('REDIS_PORT'), password=getenv('REDIS_PASSWORD'))
     return pool
 
 def get_pool():
