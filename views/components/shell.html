@@ -35,7 +35,11 @@
       <meta name="added" content="{{ props.posts[0].added }}"/>
       <meta name="id" content="{{ props.posts[0].id }}"/>
     {% endif %}
-    <script src="{{ url_for('static', filename='js/global.js') }}"></script>
+    {% block scripts %}
+      <script src="{{ url_for('static', filename='js/global.js') }}" defer></script>
+    {% endblock %}
+    {% block scripts_extra %}
+    {% endblock %}
   </head>
   <body>
     <div class="main" id="main">
@@ -43,7 +47,8 @@
       {% include 'components/subheader.html' %}
       {% include 'components/flash_messages.html' %}
       <div class="sep"></div>
-      {% block content %}{% endblock %}
+      {% block content %}
+      {% endblock %}
     </div>
   </body>
 </html>
