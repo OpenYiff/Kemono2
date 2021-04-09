@@ -16,11 +16,11 @@
       >
       <input type="submit" style="display: none;">
     </form>
-  </div>
-  <div class="ad-container">
-    <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
-    <ins id="871536" data-width="468" data-height="72"></ins>
-    <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':871536});</script>
+    <div class="ad-container">
+      <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
+      <ins id="871536" data-width="468" data-height="72"></ins>
+      <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':871536});</script>
+    </div>
   </div>
   <div id="no-posts">
     {% if results|length == 0 %}
@@ -37,12 +37,15 @@
       {% endwith %}
     {% endfor %}
   </div>
-  <div class="ad-container">
-    <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
-    <ins id="871536" data-width="468" data-height="72"></ins>
-    <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':871536});</script>
-  </div>
   <div class="paginator" id="paginator-bottom">
+    <style>
+      #sc { width:100%;height:100px;text-align:center;margin-top:1em;overflow:hidden; }
+      #sc iframe { width:520px;height:100px;border:0;overflow:hidden; }
+      @media (max-width:576px) { #sc iframe { width: 390px; } }
+    </style>
+    <div id="sc">
+      <iframe src="https://go.mshago.com/i?campaignId=&creativeId=&modelsCountry=&modelsLanguage=en&sourceId=kemp&tag=females&targetDomain=&buttonColor=&hideModelNameOnSmallSpots=1&hideTitleOnSmallSpots=1&liveBadgeColor=&showButton=0&showModelName=1&showTitle=0&showLiveBadge=0&isXhDesign=0&actionButtonPlacement=bottom&thumbSizeKey=small&hideButtonOnSmallSpots=1&userId=866766c48934bd5764b66e75df578c3db9e37359997200eb306f53ad2b16af0d&landing=WidgetV4Universal"></iframe>
+    </div>
     {% include 'components/paginator.html' %}
   </div>
 </div> 

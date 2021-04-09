@@ -32,7 +32,7 @@ def get_top_artists_by_faves(offset, count, reload = False):
 
 def get_count_of_artists_faved(reload = False):
     redis = get_conn()
-    key = 'artists_faved'
+    key = 'artists_faved_count'
     count = redis.get(key)
     if count is None or reload:
         cursor = get_cursor()
@@ -41,6 +41,56 @@ def get_count_of_artists_faved(reload = False):
             FROM lookup l
             INNER JOIN account_artist_favorite aaf
                 ON l.id = aaf.artist_id AND l.service = aaf.service
+            WHERE aaf.service != 'discord-channel'
+        """
+        cursor.execute(query)
+        count = cursor.fetchone()['count']
+        redis.set(key, count, ex = 3600)
+    else:
+        count = int(count)
+    return count
+
+def get_top_artists_by_recent_faves(offset, count, reload = False):
+    redis = get_conn()
+    key = 'top_artists_recently:' + str(offset) + ':' + str(count)
+    artists = redis.get(key)
+    if artists is None or reload:
+        cursor = get_cursor()
+        query = """
+            SELECT l.*, count(*)
+            FROM lookup l
+            INNER JOIN (
+                SELECT * FROM account_artist_favorite
+                ORDER BY id DESC LIMIT 10000
+            ) aaf
+            ON l.id = aaf.artist_id AND l.service = aaf.service
+            WHERE aaf.service != 'discord-channel'
+            GROUP BY (l.id, l.service)
+            ORDER BY count(*) DESC
+            OFFSET %s
+            LIMIT %s
+        """
+        cursor.execute(query, (offset, count,))
+        artists = cursor.fetchall()
+        redis.set(key, serialize_artists(artists), ex = 3600)
+    else:
+        artists = deserialize_artists(artists)
+    return artists
+
+def get_count_of_artists_recently_faved(reload = False):
+    redis = get_conn()
+    key = 'artists_recently_faved_count'
+    count = redis.get(key)
+    if count is None or reload:
+        cursor = get_cursor()
+        query = """
+            SELECT count(distinct(l.id, l.service))
+            FROM lookup l
+            INNER JOIN (
+                SELECT * FROM account_artist_favorite
+                ORDER BY id DESC LIMIT 10000
+            ) aaf
+            ON l.id = aaf.artist_id AND l.service = aaf.service
             WHERE aaf.service != 'discord-channel'
         """
         cursor.execute(query)

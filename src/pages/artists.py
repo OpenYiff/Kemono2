@@ -5,7 +5,7 @@ import re
 from ..utils.utils import sort_dict_list_by, offset, take, limit_int, parse_int
 from ..internals.cache.flask_cache import cache
 from ..internals.database.database import get_cursor
-from ..lib.artist import get_all_non_discord_artists, get_artist, get_artist_post_count, get_artists_by_service, get_top_artists_by_faves, get_count_of_artists_faved
+from ..lib.artist import get_all_non_discord_artists, get_artist, get_artist_post_count, get_artists_by_service, get_top_artists_by_faves, get_count_of_artists_faved, get_top_artists_by_recent_faves, get_count_of_artists_recently_faved
 from ..lib.post import get_artist_posts, get_all_posts_by_artist, is_post_flagged, get_render_data_for_posts
 from ..lib.favorites import is_artist_favorited
 from ..lib.account import load_account
@@ -36,6 +36,33 @@ def list():
         results = get_top_artists_by_faves(offset, limit)
         total_count = get_count_of_artists_faved()
         props['display'] = 'most popular artists'
+
+    props['count'] = total_count
+    props['limit'] = limit
+
+    response = make_response(render_template(
+        'artists.html',
+        props = props,
+        results = results,
+        base = base
+    ), 200)
+    response.headers['Cache-Control'] = 's-maxage=60'
+    return response
+
+@artists.route('/artists/trending')
+def get_trending_artists():
+    props = {
+        'currentPage': 'trending_artists'
+    }
+    base = request.args.to_dict()
+    base.pop('o', None)
+
+    offset = parse_int(request.args.get('o'), 0)
+    limit = 25
+
+    results = get_top_artists_by_recent_faves(offset, limit)
+    total_count = get_count_of_artists_recently_faved()
+    props['display'] = 'trending artists'
 
     props['count'] = total_count
     props['limit'] = limit
