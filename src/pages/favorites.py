@@ -1,4 +1,5 @@
 from flask import Blueprint, request, make_response, render_template, session, redirect, flash, url_for, current_app
+from babel import dates
 
 from ..utils.utils import make_cache_key, get_value, restrict_value, sort_dict_list_by, take, offset, parse_int
 from ..lib.account import load_account
@@ -44,6 +45,7 @@ def list():
         base = base,
         source = 'account',
         results = results,
+        format_date = dates.format_date
     ), 200)
     response.headers['Cache-Control'] = 's-maxage=60'
     return response

@@ -7,7 +7,7 @@
   {% set title = post['title'] %}
   {% set content = post['content']|striptags %}
   {% set attachments = post['attachments'] %}
-  {% set published = post['published'] %}
+  {% set published = format_date(post['published'], "dd MMMM YYYY", locale='en') %}
   {% set class = 'thumb-shared' if post['shared_file'] %}
   {% include 'components/thumb.html' %}
 {% endwith %}

@@ -121,7 +121,7 @@
                   {% if ticket.get('description') %}
                     <small>{{ ticket.get('description')|safe }}</small><br>
                   {% endif %}
-                  <small class="subtitle">{{ ticket.get('created') }}</small>
+                  <small class="subtitle">{{ format_date(ticket.get('created'),"dd MMMM YYYY", locale='en') }}</small>
                 </a>
               </td>
               <td>
