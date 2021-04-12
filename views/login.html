@@ -1,15 +1,48 @@
 {% extends 'components/shell.html' %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
-<div class="login-container">
-  <h3>Login</h3>
-  <form class="login" method="POST" action="{{ url_for('account.post_login') }}">
-    <label for="username">Username</label><input class="left-align-text" type="text" name="username"/>
-    <label for="password">Password</label><input class="left-align-text" type="password" name="password">
-    <input type="submit" value="Login"/>
-  </form>
-  <div class="register-cta">
+<section class="site-section site-section--login">
+  <h1 class="site-section__heading">Login</h1>
+  <p class="site-section__register-cta">
     Don't have an account? <a href="{{ url_for('account.get_register') + props.query_string }}">Register!</a>
-  </div>
-</div>
+  </p>
+  <form
+    id="login_form"
+    class="form" 
+    method="POST" 
+    action="{{ url_for('account.post_login') }}"
+  >
+    <div class="form__section">
+      <label class="form__label" for="old-username">
+        Username:
+      </label>
+      <input
+        id="old-username"
+        class="form__input" 
+        type="text" 
+        name="username"/>
+    </div>
+
+    <div class="form__section">
+      <label class="form__label" for="old-password">
+        Password:
+      </label>
+      <input 
+        id="old-password"
+        class="form__input" 
+        type="password" 
+        name="password"
+      >
+    </div>
+
+    <div class="form__section">
+      <button 
+        class="form__button form__button--submit"
+        type="submit"
+      >
+        Login
+      </button>
+    </div>
+  </form>
+  
+</section>
 {% endblock %}
