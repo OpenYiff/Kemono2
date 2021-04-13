@@ -15,7 +15,7 @@
   {% endif %}
 {% endif %}
 {% if post.published %}
-  <label for="toggle-{{ post.id }}" class="subtitle">{{ post.published }}</label>
+  <label for="toggle-{{ post.id }}" class="subtitle">{{ format_date(post.published,"dd MMMM YYYY", locale='en') }}</label>
 {% endif %}
 {% if props.flagged %}
   <span class="flag-disabled" title="This post has been flagged.">⚑</span>
