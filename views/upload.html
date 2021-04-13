@@ -5,10 +5,16 @@
   <p>
     If content for a user is distributed by means inaccessible by the <a href="/importer">importers,</a> (like email or private message) you can upload the files manually here.
   </p>
+  <noscript>
+    <p class="subtitle">
+      This page requires Javascript.
+    </p>
+  </noscript>
   <form
     class="search-form bbs-reply"
     action="/api/upload"
     enctype="multipart/form-data"
+    style="margin: 0;"
     method="post"
     onsubmit="return (typeof submitted == 'undefined') ? (submitted = true) : !submitted"
   >
@@ -17,6 +23,7 @@
         <input
           type="hidden"
           name="service"
+          id="service"
           value="{{ request.args.get('service') }}"
         >
       </div>
@@ -38,6 +45,7 @@
         <input
           type="hidden"
           name="user"
+          id="user"
           value="{{ request.args.get('user') }}"
         >
       </div>
@@ -61,7 +69,7 @@
         id="title"
         maxlength="50"
         required
-        placeholder="&quot;February 2016 Rewards&quot;"
+        placeholder="February 2020 Rewards"
       >
     </div>
     <div>
@@ -76,17 +84,14 @@
         placeholder="Specify what the file/archive is, where the original post can be found, include relevant keys/passwords, etc."
       ></textarea>
     </div>
-    <div>
-      <label for="file">File</label>
-      <input
-        id="file"
-        type="file"
-        name="file"
-        required
-      />
-      <small class="subtitle" style="margin-left: 5px;">2GB size limit</small>
-    </div>
-    <input type="submit"/>
   </form>
+  <div id="upload">
+    <div class="upload-button" id="upload-button">
+      Select or drop file
+    </div>
+    <small class="subtitle" style="margin-left: 5px;">2GB size limit</small>
+  </div>
 </div>
+<script src="{{ url_for('static', filename='js/resumable.js') }}"></script>
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
 {% endblock %}

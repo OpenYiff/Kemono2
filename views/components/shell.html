@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ props.name ~ " | Kemono" if props.name else "Kemono" }}</title>
+    <link rel="shortcut icon" href="/static/favicon.ico"/>
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/base-min.css">
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-min.css">
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
@@ -34,7 +35,11 @@
       <meta name="added" content="{{ props.posts[0].added }}"/>
       <meta name="id" content="{{ props.posts[0].id }}"/>
     {% endif %}
-    <script src="{{ url_for('static', filename='js/global.js') }}"></script>
+    {% block scripts %}
+      <script src="{{ url_for('static', filename='js/global.js') }}" defer></script>
+    {% endblock %}
+    {% block scripts_extra %}
+    {% endblock %}
   </head>
   <body>
     <div class="main" id="main">
@@ -42,7 +47,8 @@
       {% include 'components/subheader.html' %}
       {% include 'components/flash_messages.html' %}
       <div class="sep"></div>
-      {% block content %}{% endblock %}
+      {% block content %}
+      {% endblock %}
     </div>
   </body>
 </html>

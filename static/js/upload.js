@@ -22,8 +22,10 @@ function update() {
     document.getElementById('upload').style.opacity = '100%';
     var r = new Resumable({
       target: '/api/upload',
+      chunkSize: 10 * 1024 * 1024,
       maxFiles: 1,
-      simultaneousUploads: 1,
+      simultaneousUploads: 10,
+      testChunks: false,
       query:{
         service: document.getElementById('service').value,
         user: document.getElementById('user').value,
@@ -50,6 +52,10 @@ function update() {
       document.getElementById('upload-button').style.backgroundColor = '#ff6961';
       document.getElementById('upload-button').style.color = '#000';
       document.getElementById('upload-button').innerHTML = msg;
+    });
+
+    r.on('fileProgress', function(file) {
+      document.getElementById('upload-button').innerHTML = `Uploading... (${Math.floor((file.progress() / 1) * 100)}%)`;
     });
     
     r.assignBrowse(document.getElementById('upload-button'));

@@ -482,7 +482,9 @@ select::-ms-expand {
   color: #000;
 }
 
-input[type="text"], input[type="password"], input[type="number"] {
+input[type="text"], 
+input[type="password"], 
+input[type="number"] {
   border-radius: 5px;
   box-shadow: inset 0 1px 3px #1f2024;
   background:#3a3d43;
@@ -701,4 +703,78 @@ thead th {
 .info .logs {
   background-color:#3a3d43;
   font-size: 8pt;
+}
+
+.ad-container {
+  text-align: center;
+}
+
+.ad-container * {
+  max-width: 100%;
+}
+
+/*  BEM styles */
+
+/* .site-section {} */
+
+.site-section__register-cta {
+  text-align: center;
+}
+.site-section__heading {
+  text-align: center;
+}
+
+.form {
+  max-width: 360px;
+  padding: 1em;
+  margin: 0 auto;
+}
+
+.form__section {
+  padding-bottom: 1em;
+}
+
+.form__section:last-child {
+  padding-bottom: 0;
+}
+
+.form__label {
+  text-align: right;
+}
+
+.form__input,
+.form__button {
+  box-sizing: border-box;
+  min-height: 44px;
+  min-width: 44px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 100%;
+  border-radius: 5px;
+  padding: 0.5em;
+}
+
+.form__input {
+  background: hsl(224, 7%, 32%);
+  color: hsl(0, 0%, 100%);
+  border: 0;
+}
+
+/* quick hack to overwrite attribute rules */
+.form__input.form__input--text,
+.form__input.form__input--password {
+  text-align: left;
+}
+
+.form__button {
+  cursor: pointer;
+}
+
+.form__button--submit {
+  text-align: center;
+  background-image: linear-gradient(
+    hsl(220, 7%, 17%), 
+    hsl(0, 0%, 7%)
+  );
+  border: 0;
 }

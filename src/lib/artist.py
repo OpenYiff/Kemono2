@@ -1,8 +1,10 @@
 from ..internals.cache.redis import get_conn
 from ..internals.database.database import get_cursor
+from ..utils.utils import get_value
 import ujson
 import dateutil
 import copy
+import datetime
 
 def get_top_artists_by_faves(offset, count, reload = False):
     redis = get_conn()
@@ -141,7 +143,7 @@ def get_artist_last_updated(service, artist_id, reload = False):
         query = 'SELECT max(added) as max FROM posts WHERE service = %s AND "user" = %s'
         cursor.execute(query, (service, artist_id,))
         last_updated = cursor.fetchone()
-        if last_updated is not None:
+        if get_value(last_updated, 'max') is not None:
             last_updated = last_updated['max']
         else:
             last_updated = datetime.datetime.min

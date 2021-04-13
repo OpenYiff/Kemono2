@@ -33,7 +33,7 @@ services:
     volumes:
       - data:/storage
     sysctls:
-      net.core.somaxconn: 40000
+      net.core.somaxconn: 500
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 1m

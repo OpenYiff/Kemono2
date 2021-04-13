@@ -1,6 +1,21 @@
 <div class="vertical-views">
   <div class="paginator" id="paginator-top">
     {% include 'components/paginator.html' %}
+    <form
+      action="{{ request.path }}"
+      method="GET"
+      enctype="application/x-www-form-urlencoded"
+    >
+      <input
+        type="text"
+        name="q"
+        id="q"
+        autocomplete="off"
+        value="{{ request.args.get('q') if request.args.get('q') }}"
+        placeholder="search for posts..."
+      >
+      <input type="submit" style="display: none;">
+    </form>
   </div>
   <div id="no-posts">
     {% if results|length == 0 %}

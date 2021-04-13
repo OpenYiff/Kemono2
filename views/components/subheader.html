@@ -10,11 +10,8 @@
     <li><a href="/requests/new">[Post New Request]</a></li>
   </ul>
 {% endif %}
-{#
-  {% if request.endpoint == 'user' %}
-    <ul class="subheader">
-      <li><a href="/posts/upload?service={{ props.service }}&user={{ props.id }}">[Upload file]</a></li>
-      <li><a href="{{ request.path }}/rss">[RSS]</a></li>
-    </ul>
-  {% endif %}
-#}
+{% if request.endpoint == 'artists.get' %}
+  <ul class="subheader">
+    <li><a href="/posts/upload?service={{ props.service }}&user={{ props.id }}">[Upload file]</a></li>
+  </ul>
+{% endif %}

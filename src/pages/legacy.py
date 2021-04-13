@@ -576,7 +576,79 @@ def importer_submit():
     except Exception as e:
         return f'Error while connecting to archiver. Is it running? Error: {e}', 500
 
-# TODO: file sharing api (/api/upload)
+@legacy.route('/api/upload', methods=['POST'])
+def upload():
+    resumable_dict = {
+        'resumableIdentifier': request.form.get('resumableIdentifier'),
+        'resumableFilename': request.form.get('resumableFilename'),
+        'resumableTotalSize': request.form.get('resumableTotalSize'),
+        'resumableTotalChunks': request.form.get('resumableTotalChunks'),
+        'resumableChunkNumber': request.form.get('resumableChunkNumber')
+    }
+
+    if int(request.form.get('resumableTotalSize')) > int(getenv('UPLOAD_LIMIT')):
+        return "File too large.", 415
+
+    makedirs(join(getenv('DB_ROOT'), 'uploads'), exist_ok=True)
+    makedirs(join(getenv('DB_ROOT'), 'uploads', 'temp'), exist_ok=True)
+
+    resumable = UploaderFlask(
+        resumable_dict,
+        join(getenv('DB_ROOT'), 'uploads'),
+        join(getenv('DB_ROOT'), 'uploads', 'temp'),
+        request.files['file']
+    )
+
+    resumable.upload_chunk()
+
+    if resumable.check_status() is True:
+        resumable.assemble_chunks()
+        try:
+            resumable.cleanup()
+        except:
+            pass
+
+        post_model = {
+            'id': ''.join(random.choice(string.ascii_letters) for x in range(8)),
+            '"user"': request.form.get('user'),
+            'service': request.form.get('service'),
+            'title': request.form.get('title'),
+            'content': request.form.get('content') or "",
+            'embed': {},
+            'shared_file': True,
+            'added': datetime.now(),
+            'published': datetime.now(),
+            'edited': None,
+            'file': {
+                "name": request.form.get('resumableFilename'),
+                "path": f"/uploads/{request.form.get('resumableFilename')}"
+            },
+            'attachments': []
+        }
+
+        post_model['embed'] = json.dumps(post_model['embed'])
+        post_model['file'] = json.dumps(post_model['file'])
+        
+        columns = post_model.keys()
+        data = ['%s'] * len(post_model.values())
+        data[-1] = '%s::jsonb[]' # attachments
+        query = "INSERT INTO posts ({fields}) VALUES ({values})".format(
+            fields = ','.join(columns),
+            values = ','.join(data)
+        )
+        cursor = get_cursor()
+        cursor.execute(query, list(post_model.values()))
+        
+        return jsonify({
+            "fileUploadStatus": True,
+            "resumableIdentifier": resumable.repo.file_id
+        })
+
+    return jsonify({
+        "chunkUploadStatus": True,
+        "resumableIdentifier": resumable.repo.file_id
+    })
+
 
 @legacy.route('/api/bans')
 def bans():
