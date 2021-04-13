@@ -1,9 +1,11 @@
-{% macro image_link(src, alt="") -%}
+{% macro image_link(src, alt="", lazy=true) -%}
   <a class="image-link" href="{{ src }}">
-    <picture>
+    <picture class="image-link__picture">
       <img 
+        class="image-link__image"
         src="{{ src }}" 
-        alt="{{ alt }}" 
+        alt="{{ alt }}"
+        loading="{{ 'lazy' if lazy is true else 'eager' }}"
       >
     </picture>
   </a>
