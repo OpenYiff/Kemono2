@@ -10,7 +10,7 @@
      * @param {string} user 
      * @param {string} post_id 
      */
-    postFavoritePost(service, user, post_id) {
+    favoritePost(service, user, post_id) {
       return new Promise((resolve, reject) => {
         kemonoFetchAsync(`/favorites/post/${service}/${user}/${post_id}`, {
           method: 'POST'
@@ -32,7 +32,7 @@
      * @param {string} user 
      * @param {string} post_id 
      */
-    deleteUnfavoritePost(service, user, post_id) {
+    unfavoritePost(service, user, post_id) {
       return new Promise((resolve, reject) => {
         kemonoFetchAsync(`/favorites/post/${service}/${user}/${post_id}`, {
           method: "DELETE"
@@ -52,7 +52,7 @@
      * @param {string} service 
      * @param {string} user 
      */
-    postFavoriteArtist(service, user) {
+    favoriteArtist(service, user) {
       return new Promise((resolve, reject) => {
         kemonoFetchAsync(`/favorites/artist/${service}/${user}`, {
           method: 'POST'
@@ -71,7 +71,7 @@
      * @param {string} service 
      * @param {string} user 
      */
-    deleteUnfavoriteArtist(service, user) {
+    unfavoriteArtist(service, user) {
       return new Promise((resolve, reject) => {
         kemonoFetchAsync(`/favorites/artist/${service}/${user}`, {
           method: "DELETE"
@@ -96,15 +96,19 @@
   loadingImage.setAttribute("src", "/static/loading.gif");
   const loadingImageString = loadingImage.outerHTML;
 
-  // select sections
-  const sectionRegister = document.querySelector(".site-section--register");
-  const sectionPostDetails = document.querySelector('.site-section--post-details');
-  const sectionUser = document.querySelector('.site-section--user-details');
+  const sectionList = [
+    { name: "register", callback: initSectionRegister },
+    { name: "post-details", callback: initSectionPostDetails },
+    { name: "user-details", callback: initSectionUserDetails },
+  ];
 
-  // run the script for present ones
-  sectionRegister && initSectionRegister();
-  sectionPostDetails && initSectionPostDetails();
-  sectionUser && initSectionUserDetails();
+  for (const sectionItem of sectionList) {
+    const section = document.querySelector(`.site-section--${sectionItem.name}`);
+
+    if (section) {
+      sectionItem.callback();
+    }
+  }
 
   function initSectionRegister() {
     populate_favorites();
@@ -158,7 +162,7 @@
       button.innerHTML = loadingImageString;
 
       if (button.classList.contains("user-post__favorite--favorited")) {
-        kemonoAPI.deleteUnfavoritePost(service, user, userPost.id)
+        kemonoAPI.unfavoritePost(service, user, userPost.id)
           .then(response => {
             if (response.success) {
               favButton.classList.toggle("user-post__favorite--favorited");
@@ -168,7 +172,7 @@
           });
 
       } else {
-        kemonoAPI.postFavoritePost(service, user, userPost.id)
+        kemonoAPI.favoritePost(service, user, userPost.id)
           .then(response => {
             if (response.success) {
               favButton.classList.toggle("user-post__favorite--favorited");
@@ -206,7 +210,7 @@
       button.innerHTML = loadingImageString;
 
       if (button.classList.contains("user-post__favorite--favorited")) {
-        kemonoAPI.deleteUnfavoriteArtist(service, userDetails.id)
+        kemonoAPI.unfavoriteArtist(service, userDetails.id)
           .then(response => {
             if (response.success) {
               favButton.classList.toggle("user-post__favorite--favorited");
@@ -216,7 +220,7 @@
           });
 
       } else {
-        kemonoAPI.postFavoriteArtist(service, userDetails.id)
+        kemonoAPI.favoriteArtist(service, userDetails.id)
           .then(response => {
             if (response.success) {
               favButton.classList.toggle("user-post__favorite--favorited");
