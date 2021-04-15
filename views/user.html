@@ -1,36 +1,56 @@
 {% extends 'components/shell.html' %}
 {% block content %}
 <!-- originally recent.js -->
-<div class="user-header" style="background-image: url('/banners/{{ props.service }}/{{ props.id }}');">
-  <div class="user-header-avatar" style="background-image: url('/icons/{{ props.service }}/{{ props.id }}');"></div>
-  <div class="user-header-info">
-    <div id="user-header-info-top" class="user-header-info-top">
-      <a href="/{{ props.service }}/user/{{ props.id }}"><span class="user-header-info-title">{{ props.name }}</span></a>
-      {% if props.service == "patreon" %}
-      <a target="_blank" rel="noreferrer" href="https://www.patreon.com/user?u={{ props.id }}">
-      {% elif props.service == "fanbox" %}
-      <a target="_blank" rel="noreferrer" href="https://www.pixiv.net/fanbox/creator/{{ props.id }}">
-      {% elif props.service == "subscribestar" %}
-      <a target="_blank" rel="noreferrer" href="https://subscribestar.adult/{{ props.id }}">
-      {% elif props.service == "gumroad" %}
-      <a target="_blank" rel="noreferrer" href="https://gumroad.com/{{ props.id }}">
-      {% elif props.service == "dlsite" %}
-      <a target="_blank" rel="noreferrer" href="https://www.dlsite.com/eng/circle/profile/=/maker_id/{{ props.id }}">
-      {% endif %}
-        <div class="user-header-info-{{ props.service }}"></div>
-      </a>
-      {% if props.favorited %}
-        <a href="javascript:unfavorite_artist('{{ props.artist.service }}', '{{ props.artist.id }}');" class="user-header-favorite">
-          <span style="color: #FFD700;">★</span>
+<section class="site-section site-section--user-details">
+  {# TODO: rewrite client script to parse URL #}
+  <div
+    class="user-header"
+    id="{{ props.id }}"
+    data-service="{{ props.service }}"
+    style="background-image: url('/banners/{{ props.service }}/{{ props.id }}');"
+  >
+    <div class="user-header-avatar" style="background-image: url('/icons/{{ props.service }}/{{ props.id }}');"></div>
+    <div class="user-header-info">
+      <div id="user-header-info-top" class="user-header-info-top">
+        <a href="/{{ props.service }}/user/{{ props.id }}" >
+          <span class="user-header-info-title">{{ props.name }}</span>
         </a>
-      {% else %}
-        <a href="javascript:favorite_artist('{{ props.artist.service }}', '{{ props.artist.id }}');" class="user-header-favorite">
-          ☆
-        </a>
-      {% endif %}
+        {% if props.service == "patreon" %}
+          <a 
+            target="_blank" rel="noreferrer" href="https://www.patreon.com/user?u={{ props.id }}"
+          >
+        {% elif props.service == "fanbox" %}
+          <a 
+            target="_blank" rel="noreferrer" href="https://www.pixiv.net/fanbox/creator/{{ props.id }}"
+          >
+        {% elif props.service == "subscribestar" %}
+          <a 
+            target="_blank" rel="noreferrer" href="https://subscribestar.adult/{{ props.id }}"
+          >
+        {% elif props.service == "gumroad" %}
+          <a 
+            target="_blank" rel="noreferrer" href="https://gumroad.com/{{ props.id }}"
+          >
+        {% elif props.service == "dlsite" %}
+          <a 
+            target="_blank" rel="noreferrer" href="https://www.dlsite.com/eng/circle/profile/=/maker_id/{{ props.id }}"
+          >
+        {% endif %}
+          
+          <div class="user-header-info-{{ props.service }}"></div>
+          </a>
+        {% if props.favorited %}
+          <button class="user-post__favorite user-post__favorite--user user-post__favorite--favorited" type="button">
+            ★
+          </button>
+        {% else %}
+          <button class="user-post__favorite user-post__favorite--user" type="button">
+            ☆
+          </button>
+        {% endif %}
+      </div>
     </div>
   </div>
-</div>
-<script src="{{ url_for('static', filename='js/user.js') }}"></script>
 {% include 'components/post_list.html' %}
+</section>
 {% endblock %}

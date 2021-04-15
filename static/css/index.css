@@ -778,3 +778,35 @@ thead th {
   );
   border: 0;
 }
+
+/* User post */
+
+/* .user-post {} */
+
+.user-post__favorite {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+}
+
+.user-post__favorite--user {
+  /* quick hack to size button */
+  font-size: 32px;
+}
+
+.user-post__favorite:disabled {
+  cursor: progress;
+}
+
+.user-post__favorite--favorited {
+  color: hsl(51, 100%, 50%)
+}
+
+/* User post */
+
+/* Image */
+.image {
+  max-width: 100%;
+  height: auto;
+}
+/* Image */
