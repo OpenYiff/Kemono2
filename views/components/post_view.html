@@ -10,13 +10,13 @@
 {% if post.service != 'subscribestar' %}
   {% if post_link_in_title %}
     <a 
-        href="/{{ post['service'] }}/user/{{ post['user'] }}/post/{{ post['id'] }}" 
-        target="_blank"
-      >
-        <label class="card-title">
-          {{ post.title }}
-        </label>
-      </a>
+      href="/{{ post['service'] }}/user/{{ post['user'] }}/post/{{ post['id'] }}" 
+      target="_blank"
+    >
+      <label class="card-title">
+        {{ post.title }}
+      </label>
+    </a>
   {% else %}
     <label for="toggle-{{ post.id }}" class="card-title">
       {{ post.title }}
