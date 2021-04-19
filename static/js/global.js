@@ -1,9 +1,35 @@
 ; (() => {
+  "use strict";
+
+  /**
+   * @type {HTMLElement | null}
+   */
+  const globalFooter = document.querySelector(".global-footer");
+
   // select registration section
   const sectionRegister = document.querySelector(".site-section--register");
 
-  // if it's present run its script
+  // run scripts for present parts
+  globalFooter && initGlobalFooter(globalFooter);
   sectionRegister && initSectionRegister();
+
+  /**
+   * @param {HTMLElement} footer 
+   */
+  function initGlobalFooter(footer) {
+    const navBar = footer.querySelector(".global-footer__navigation");
+    /**
+     * @type {HTMLButtonElement | null}
+     */
+    const navButton = footer.querySelector(".global-footer__nav-button");
+
+    navButton.addEventListener("click", switchNavBar)
+
+    function switchNavBar() {
+      navBar.classList.toggle("global-footer__navigation--hidden");
+      navButton.classList.toggle("global-footer__nav-button--active");
+    }
+  }
 
   function initSectionRegister() {
     populate_favorites();

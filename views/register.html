@@ -1,10 +1,10 @@
 {% extends 'components/shell.html' %}
 {% block content %}
-<section class="login-container site-section site-section--register">
+<section class="site-section site-section--register">
   <h1 class="site-section__heading">Register</h1>
-  <div class="site-section__register-cta">
+  <p class="site-section__register-cta">
     Already have an account? <a href="{{ url_for('account.get_login') + props.query_string }}">Log in!</a>
-  </div>
+  </p>
   <form 
     id="register_form" 
     class="form" 
@@ -17,9 +17,10 @@
       name="favorites"
     />
     <div class="form__section">
-      <label class="form__label" for="username">Username:</label>
+      <label class="form__label" for="new-username">Username:</label>
       <input 
-        class="left-align-text form__input form__input--text" 
+        id="new-username"
+        class="form__input" 
         type="text" 
         name="username" 
         value="{{ request.form['username'] }}"
@@ -27,17 +28,19 @@
     </div>
 
     <div class="form__section">
-      <label class="form__label" for="password">Password:</label>
+      <label class="form__label" for="new-password">Password:</label>
       <input 
-        class="left-align-text form__input form__input--password" 
+        id="new-password"
+        class="form__input" 
         type="password" 
         name="password"
       >
     </div>
     <div class="form__section">
-      <label class="form__label" for="password">Confirm Password:</label>
+      <label class="form__label" for="confirm-password">Confirm Password:</label>
       <input 
-        class="left-align-text form__input form__input--password" 
+        id="confirm-password"
+        class="form__input" 
         type="password" 
         name="confirm_password"
       >

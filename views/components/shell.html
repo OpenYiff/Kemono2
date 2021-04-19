@@ -1,11 +1,37 @@
+{% import 'components/macros.html' as macros %}
+
+{# TODO: rewrite classes into separate block #}
+{% macro nav_list(class) -%}
+  <ul class="{{ class }}">
+    <li class="global-header__nav-item">
+      <a class="global-header__nav-link" href="/artists/updated">Artists</a>
+    </li>
+    <li class="global-header__nav-item">
+      <a class="global-header__nav-link" href="/posts">Posts</a>
+    </li>
+    <li class="global-header__nav-item">
+      <a class="global-header__nav-link" href="/importer">Import</a>
+    </li>
+    <li class="global-header__nav-item">
+      <a class="global-header__nav-link" href="/requests">Requests</a>
+    </li>
+  </ul>
+{% endmacro %}
+
 <!DOCTYPE html>
 <html>
   <head>
     <script>var page_data = {{ render_page_data()|safe }}</script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta 
+      name="viewport" 
+      content="width=device-width, initial-scale=1"
+    >
     <title>{{ props.name ~ " | Kemono" if props.name else "Kemono" }}</title>
-    <link rel="shortcut icon" href="/static/favicon.ico"/>
+    <link 
+      rel="shortcut icon" 
+      href="{{ url_for('static', filename='favicon.ico') }}"
+    >
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/base-min.css">
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-min.css">
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
@@ -43,13 +69,72 @@
     {% endblock %}
   </head>
   <body>
-    <div class="main" id="main">
-      {% include 'components/header.html' %}
-      {% include 'components/subheader.html' %}
+    <header class="global-header">
+      <nav class="global-header__navigation">
+        <div class="global-header__logo">
+          {# TODO: add title in a line #}
+          <a class="global-header__logo-link" href="/">{{ macros.site_logo() }}</a>
+        </div>
+
+        {{ nav_list("global-header__navlist global-header__navlist--mid") }}
+
+        <ul class="global-header__navlist">
+          {% if is_logged_in() %}
+            <li class="global-header__nav-item">
+              <a class="global-header__nav-link" href="{{ url_for('favorites.list') }}">Favorites</a>
+            </li>
+            <!-- <li {{ 'class="current-page"'|safe if props.currentPage == 'help' }}><a href="{{ url_for('account.get_account') }}">Account</a></li> -->
+            <li class="global-header__nav-item">
+              <a class="global-header__nav-link" href="{{ url_for('account.logout') }}">Logout</a>
+            </li>
+          {% else %}
+            <li class="global-header__nav-item">
+              <a class="global-header__nav-link" href="{{ url_for('account.get_login') }}">Login</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+
+      <nav class="global-header__bottom">
+      {% if props.currentPage == 'artists' %}
+        <ul class="subheader">
+          <li><a href="/artists">[Artist List]</a></li>
+          <li><a href="/artists/random">[Random Artist]</a></li>
+          <li>
+            <a href="/artists/updated">[Recently Updated Artists]</a>
+          </li>
+        </ul>
+      {% endif %}
+      {% if props.currentPage == 'requests' %}
+        <ul class="subheader">
+          <li><a href="/requests">[Request List]</a></li>
+          <li><a href="/requests/new">[Post New Request]</a></li>
+        </ul>
+      {% endif %}
+      {% if request.endpoint == 'artists.get' %}
+        <ul class="subheader">
+          <li><a href="/posts/upload?service={{ props.service }}&user={{ props.id }}">[Upload file]</a></li>
+        </ul>
+      {% endif %}
+      </nav>
       {% include 'components/flash_messages.html' %}
-      <div class="sep"></div>
+    </header>
+    <main class="main" id="main">
       {% block content %}
       {% endblock %}
-    </div>
+    </main>
+    <footer class="global-footer">
+      <nav class="global-footer__navigation global-footer__navigation--hidden">
+        {{ nav_list("global-footer__navlist ") }}
+      </nav>
+      <div class="global-footer__nav-switch">
+        <button 
+          class="global-footer__nav-button"
+          type="button"
+        >
+          Navigation
+        </button>
+      </div>
+    </footer>
   </body>
 </html>
