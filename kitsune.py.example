@@ -6,5 +6,8 @@ database_dbname = 'kemonodb'
 database_user = 'nano'
 database_password = 'shinonome'
 
+redis_host = 'kemono-redis'
+redis_port = 6379
+
 # proxies = ["socks5://user:pass@host:port"]
 proxies = []

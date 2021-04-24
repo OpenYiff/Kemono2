@@ -1,12 +1,11 @@
 {% extends 'components/shell.html' %}
 {% block content %}
+<script type="text/javascript" src="/static/js/importer_status.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/importer.css') }}">
 <div class="info">
   <p>
     <strong>Importer logs</strong><br>
-    For bug reporting purposes, your importer ID is <strong>{{ props.id }}</strong>.
-    <div class="logs" id="logs">
-      <p>{{ log | replace('\n', '<br>') | safe }}></p>
-    </div>
+    <div class="logs" id="logs"></div>
   </p>
 </div>
 {% endblock %}

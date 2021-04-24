@@ -14,7 +14,7 @@ import src.internals.cache.redis as redis
 from src.internals.cache.flask_cache import cache
 from src.lib.ab_test import get_all_variants
 from src.lib.account import is_logged_in
-from src.utils.utils import url_is_for_non_logged_file_extension
+from src.utils.utils import url_is_for_non_logged_file_extension, render_page_data
 
 from src.pages.home import home
 from src.pages.legacy import legacy
@@ -25,6 +25,7 @@ from src.pages.account import account
 from src.pages.favorites import favorites
 from src.pages.help import help_app
 from src.pages.proxy import proxy_app
+from src.pages.importer import importer_page
 
 app = Flask(
     __name__,
@@ -42,15 +43,18 @@ app.register_blueprint(account)
 app.register_blueprint(favorites)
 app.register_blueprint(help_app, url_prefix='/help')
 app.register_blueprint(proxy_app, url_prefix='/proxy')
+app.register_blueprint(importer_page)
 
 app.config.from_pyfile('flask.cfg')
 app.jinja_env.globals.update(is_logged_in=is_logged_in)
+app.jinja_env.globals.update(render_page_data=render_page_data)
 app.jinja_env.filters['regex_match'] = lambda val, rgx: re.search(rgx, val)
 app.jinja_env.filters['regex_find'] = lambda val, rgx: re.findall(rgx, val)
 
 logging.basicConfig(filename='kemono.log', level=logging.DEBUG)
-pil_logger = logging.getLogger('PIL')
-pil_logger.setLevel(logging.INFO)
+logging.getLogger('PIL').setLevel(logging.INFO)
+logging.getLogger('requests').setLevel(logging.WARNING)
+logging.getLogger('urllib3').setLevel(logging.WARNING)
 
 cache.init_app(app)
 database.init()
@@ -58,6 +62,7 @@ redis.init()
 
 @app.before_request
 def do_init_stuff():
+    g.page_data = {}
     g.request_start_time = datetime.datetime.now()
     session.permanent = True
     app.permanent_session_lifetime = timedelta(days=30)
@@ -94,6 +99,10 @@ def close(e):
         cursor.close()
         connection = g.pop('connection', None)
         if connection is not None:
-            pool = database.get_pool()
-            connection.commit()
-            pool.putconn(connection)
+            try:
+                pool = database.get_pool()
+                connection.commit()
+                pool.putconn(connection)
+            except:
+                pass
+            

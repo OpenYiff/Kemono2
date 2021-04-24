@@ -14,9 +14,9 @@
       <option value="fanbox">Pixiv Fanbox</option>
       <option value="gumroad">Gumroad</option>
       <option value="subscribestar">SubscribeStar</option>
-      <option value="discord">Discord</option>
-      <option value="dlsite">DLsite English</option>
-      <option value="dlsite-jp">DLsite Japan</option>
+      <option value="discord" disabled>Discord</option>
+      <option value="dlsite" disabled >DLsite English</option>
+      <option value="dlsite-jp" disabled>DLsite Japan</option>
     </select>
     <input 
       type="text"
@@ -39,8 +39,13 @@
       spellcheck="false"
     >
     <input type="submit"/>
+    <div id="consent" style="width:100%;margin-top:5px">
+      <input type="checkbox" checked="checked" id="save-session-key" name="save_session_key" value="1" style="display:inline;margin-right:5px"/>
+      <label for="save-session-key" style="display:inline">I want to allow the development team to use my session for debugging (your session will be encrypted)</label>
+    </div>
   </form>
   <p>
+    <span class="subtitle">Discord and DLsite importers are unimplemented. Sorry for the inconvenience.</span><br>
     <a href="/importer/tutorial">Learn how to get your session key.</a><br>
     <h2>Important information</h2>
     Your session key is used to scrape paid posts from your feed. After downloading missing posts, the key is immediately discarded and never stored.

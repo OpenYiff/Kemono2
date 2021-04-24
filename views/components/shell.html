@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script>var page_data = {{ render_page_data()|safe }}</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ props.name ~ " | Kemono" if props.name else "Kemono" }}</title>

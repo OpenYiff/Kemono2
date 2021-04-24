@@ -1,5 +1,6 @@
 from datetime import datetime
-from flask import request
+from flask import request, g
+import json
 
 def make_cache_key(*args, **kwargs):
     return request.full_path
@@ -97,3 +98,6 @@ def parse_int(string, default = 0):
         return int(string)
     except Exception:
         return default
+
+def render_page_data():
+    return json.dumps(g.page_data)

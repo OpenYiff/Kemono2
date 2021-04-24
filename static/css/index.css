@@ -149,6 +149,10 @@ a:link {
   background: #3a3d43;
 }
 
+.jumbo p {
+  margin: 0;
+}
+
 .jumbo-user {
   text-align: center;
 }
@@ -683,26 +687,6 @@ thead th {
   background-size: cover;
   background-position: center;
   border-radius: 0.25rem;
-}
-
-/* Info pages */
-
-.info {
-  width: 450px;
-  text-align: center;
-  margin: 5px auto auto auto;
-  border: 1px solid #111;
-  background: #282a2e;
-  padding: 2px 5px 2px 5px;
-}
-
-.info * {
-  font-size: 10pt;
-}
-
-.info .logs {
-  background-color:#3a3d43;
-  font-size: 8pt;
 }
 
 .ad-container {

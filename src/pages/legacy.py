@@ -480,102 +480,6 @@ def request_submit():
         props = props
     ), 200)
 
-@legacy.route('/importer')
-def importer():
-    props = {
-        'currentPage': 'import'
-    }
-
-    response = make_response(render_template(
-        'importer_list.html',
-        props = props
-    ), 200)
-    response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'
-    return response
-
-@legacy.route('/importer/tutorial')
-def importer_tutorial():
-    props = {
-        'currentPage': 'import'
-    }
-
-    response = make_response(render_template(
-        'importer_tutorial.html',
-        props = props
-    ), 200)
-    response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'
-    return response
-
-@legacy.route('/importer/ok')
-def importer_ok():
-    props = {
-        'currentPage': 'import'
-    }
-
-    response = make_response(render_template(
-        'importer_ok.html',
-        props = props
-    ), 200)
-    response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'
-    return response
-
-@legacy.route('/importer/status/<lgid>')
-def importer_status(lgid):
-    props = {
-        'currentPage': 'import',
-        'id': lgid
-    }
-
-    try:
-        with open(join(getenv('DB_ROOT'), 'logs', lgid + '.log')) as f:
-            response = make_response(render_template(
-                'importer_status.html',
-                props = props,
-                log = f.read()
-            ), 200)
-    except IOError:
-        props['message'] = 'That log doesn\'t exist.'
-        response = make_response(render_template(
-            'error.html',
-            props = props
-        ), 401)
-
-    response.headers['Cache-Control'] = 'max-age=0, private, must-revalidate'
-    return response
-
-### API ###
-@legacy.route('/api/import', methods=['POST'])
-def importer_submit():
-    host = getenv('ARCHIVERHOST')
-    port = getenv('ARCHIVERPORT') if getenv('ARCHIVERPORT') else '8000'
-
-    try:
-        r = requests.post(
-            f'http://{host}:{port}/api/import',
-            json = {
-                'service': request.form.get("service"),
-                'session_key': request.form.get("session_key"),
-                'channel_ids': request.form.get("channel_ids")
-            },
-            params = {
-                'service': request.form.get("service"),
-                'session_key': request.form.get("session_key"),
-                'channel_ids': request.form.get("channel_ids")
-            }
-        )
-        r.raise_for_status()
-        # in new importer, return just the id instead of a whole page
-        props = {
-            'currentPage': 'import',
-            'redirect': f'/importer/status/{r.text}'
-        }
-        return make_response(render_template(
-            'success.html',
-            props = props
-        ), 200)
-    except Exception as e:
-        return f'Error while connecting to archiver. Is it running? Error: {e}', 500
-
 @legacy.route('/api/upload', methods=['POST'])
 def upload():
     resumable_dict = {
@@ -648,7 +552,6 @@ def upload():
         "chunkUploadStatus": True,
         "resumableIdentifier": resumable.repo.file_id
     })
-
 
 @legacy.route('/api/bans')
 def bans():
