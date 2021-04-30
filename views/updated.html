@@ -40,7 +40,11 @@
                 }.get(artist['service'], '') }}
               </td>
               <td>
-                {{ artist['max'] }}
+                <time 
+                  datetime="{{ artist['max'].isoformat() }}"
+                >
+                  {{ format_timedelta(datetime.now() - artist['max'], locale="en") }} ago
+                </time> 
               </td>
             </tr>
           {% endfor %}

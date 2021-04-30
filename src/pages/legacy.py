@@ -19,6 +19,7 @@ import requests
 from markupsafe import Markup
 from bleach.sanitizer import Cleaner
 from hashlib import sha256
+from babel import dates
 
 from ..internals.database.database import get_cursor
 from ..internals.cache.flask_cache import cache
@@ -40,7 +41,10 @@ def updated_artists():
     response = make_response(render_template(
         'updated.html',
         props = props,
-        results = results
+        results = results,
+        datetime = datetime,
+        format_timedelta = dates.format_timedelta
+
     ), 200)
     response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'
     return response
@@ -193,7 +197,8 @@ def posts():
         result_attachments = result_attachments,
         result_flagged = result_flagged,
         result_after_kitsune = result_after_kitsune,
-        result_is_image = result_is_image
+        result_is_image = result_is_image,
+        format_date = dates.format_date
     ), 200)
     response.headers['Cache-Control'] = 'no-store, max-age=0'
     return response
@@ -322,7 +327,8 @@ def requests_list():
         'requests_list.html',
         props = props,
         results = results,
-        base = base
+        base = base,
+        format_date = dates.format_date
     ), 200)
     return response
 

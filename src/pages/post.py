@@ -1,4 +1,5 @@
 from flask import Blueprint, request, make_response, render_template, redirect, url_for
+from babel import dates
 
 import datetime
 import re
@@ -101,6 +102,7 @@ def get(service, artist_id, post_id):
         post = post,
         result_previews = previews,
         result_attachments = attachments,
+        format_date = dates.format_date
     ), 200)
     response.headers['Cache-Control'] = 's-maxage=60'
     return response
