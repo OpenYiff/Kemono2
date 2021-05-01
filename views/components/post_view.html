@@ -9,13 +9,24 @@
 {# title hidden with subscribestar posts to prevent redundancy #}
 {% if post.service != 'subscribestar' %}
   {% if post_link_in_title %}
-    <a href="/{{ post['service'] }}/user/{{ post['user'] }}/post/{{ post['id'] }}" target="_blank"><label class="card-title">{{ post.title }}</label></a>
+    <a 
+      href="/{{ post['service'] }}/user/{{ post['user'] }}/post/{{ post['id'] }}" 
+      target="_blank"
+    >
+      <label class="card-title">
+        {{ post.title }}
+      </label>
+    </a>
   {% else %}
-    <label for="toggle-{{ post.id }}" class="card-title">{{ post.title }}</label>
+    <label for="toggle-{{ post.id }}" class="card-title">
+      {{ post.title }}
+    </label>
   {% endif %}
 {% endif %}
 {% if post.published %}
-  <label for="toggle-{{ post.id }}" class="subtitle">{{ post.published }}</label>
+  <label for="toggle-{{ post.id }}" class="subtitle">
+    {{ post.published }}
+  </label>
 {% endif %}
 {% if props.flagged %}
   <span class="flag-disabled" title="This post has been flagged.">⚑</span>
@@ -23,9 +34,19 @@
   <span class="flag" title="Flag post" id="flag-button" data-service="{{ post.service }}" data-user="{{ post.user }}" data-post="{{ post.id }}">⚑</span>
 {% endif %}
 {% if props.favorited %}
-  <a href="javascript:unfavorite_post('{{ post.service }}', '{{ post.user }}', '{{ post.id }}');"><span style="color: #FFD700;">★</span></a>
+  <button 
+    class="user-post__favorite user-post__favorite--favorited" 
+    type="button"
+  >
+    ★
+  </button>
 {% else %}
-  <a href="javascript:favorite_post('{{ post.service }}', '{{ post.user }}', '{{ post.id }}');">☆</a>
+  <button 
+    class="user-post__favorite" 
+    type="button"
+  >
+    ☆
+  </button>
 {% endif %}
 <br>
 {% for attachment in attachments %}
@@ -36,6 +57,7 @@
 {% endfor %}
 <p>
   {% if post.service == "subscribestar" and after_kitsune %}
+    {# unclosed div? #}
     <div>
   {% endif %}
   {{ post.content|safe }}

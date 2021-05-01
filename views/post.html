@@ -1,6 +1,6 @@
 {% extends 'components/shell.html' %}
 {% block content %}
-<div class="page" id="page">
+<div class="page site-section site-section--post-details" id="page">
   {% if post %}
     <div class="nav-links">
       <ul>
@@ -21,7 +21,13 @@
           </div>
         </a>
       </div>
-      <div class="pure-u-1 pure-u-sm-1 pure-u-md-4-5">
+      {# TODO: replace `data` properties with page URL parsing in js #}
+      <div 
+        id="{{ post.id }}"
+        class="pure-u-1 pure-u-sm-1 pure-u-md-4-5 user-post"
+        data-service="{{ post.service }}"
+        data-user="{{ post.user }}"
+      >
         {% set previews = result_previews %}
         {% set attachments = result_attachments %}
         {% set after_kitsune = props.after_kitsune %}
@@ -36,6 +42,5 @@
     </div>
   {% endif %}
 </div>
-<script src="{{ url_for('static', filename='js/post.js') }}"></script>
 <script src="{{ url_for('static', filename='js/expander.js') }}"></script>
 {% endblock %}
