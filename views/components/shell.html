@@ -1,22 +1,52 @@
-{% import 'components/macros.html' as macros %}
+{% from "macros/svg_icons.html" import svg_container, svg_icon %}
 
-{# TODO: rewrite classes into separate block #}
-{% macro nav_list(class) -%}
-  <ul class="{{ class }}">
-    <li class="global-header__nav-item">
-      <a class="global-header__nav-link" href="/artists/updated">Artists</a>
+{% set nav_items = [
+  ("Artists", [
+    ("/artists", "Search", true),
+    ("/artists/updated", "Recently Updated", true),
+    ("/artists/random", "Random", true),
+  ]),
+  ("Posts", [
+    ("/posts", "Recently Posted", true),
+    ("/favorites?type=post", "By Favorite Artists", true),
+  ]),
+  ("Favorites", [
+    ("/favorites?type=post", "Posts", true),
+    ("/favorites?type=artist", "Artists", true)
+  ]),
+  ("Requests", [
+    ("/requests", "List", true),
+    ("/requests/new", "Create New", true)
+  ])
+] %}
+
+{% macro nav_list(class_name, navigation=nav_items) -%}
+<ul class="nav-list {{ class_name }}">
+  {% for section_name, list in navigation %}
+    <li class="nav-list__item">
+      <button class="nav-list__button">{{ section_name }}</button>
+      <ul class="nav-list__sublist nav-list__sublist--hidden">
+        {% for href, title, predicate in list %}
+          {% if predicate %}
+            <li class="nav-list__item">
+              <a class="nav-list__link" href="{{ href }}" >
+                {{ title }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
     </li>
-    <li class="global-header__nav-item">
-      <a class="global-header__nav-link" href="/posts">Posts</a>
-    </li>
-    <li class="global-header__nav-item">
-      <a class="global-header__nav-link" href="/importer">Import</a>
-    </li>
-    <li class="global-header__nav-item">
-      <a class="global-header__nav-link" href="/requests">Requests</a>
-    </li>
+  {% endfor %}
+</ul>
+{%- endmacro %}
+
+{# TODO: move it into artist page #}
+{# {% if request.endpoint == 'artists.get' %}
+  <ul class="subheader">
+    <li><a href="/posts/upload?service={{ props.service }}&user={{ props.id }}">[Upload file]</a></li>
   </ul>
-{% endmacro %}
+{% endif %} #}
 
 <!DOCTYPE html>
 <html>
@@ -34,6 +64,7 @@
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/base-min.css">
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-min.css">
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
+    {{ svg_container() }}
     {% if props.compatibility %}
       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/compatibility.css') }}">
     {% else %}
@@ -71,50 +102,30 @@
     <header class="global-header">
       <nav class="global-header__navigation">
         <div class="global-header__logo">
-          {# TODO: add title in a line #}
-          <a class="global-header__logo-link" href="/">{{ macros.site_logo() }}</a>
+          <a class="kemono-logo" href="/">
+            <span class="kemono-logo__icon">
+              {{ svg_icon("kemono-logo") }}
+            </span>
+            <span class="kemono-logo__title">
+              Kemono
+            </span>
+          </a>
         </div>
 
-        {{ nav_list("global-header__navlist global-header__navlist--mid") }}
+        {{ nav_list("nav-list--mid") }}
 
-        <ul class="global-header__navlist">
+        <ul class="nav-list nav-list--side">
           {% if is_logged_in() %}
-            <li class="global-header__nav-item">
-              <a class="global-header__nav-link" href="{{ url_for('favorites.list') }}">Favorites</a>
-            </li>
-            <!-- <li {{ 'class="current-page"'|safe if props.currentPage == 'help' }}><a href="{{ url_for('account.get_account') }}">Account</a></li> -->
-            <li class="global-header__nav-item">
-              <a class="global-header__nav-link" href="{{ url_for('account.logout') }}">Logout</a>
+            {# <li {{ 'class="current-page"'|safe if props.currentPage == 'help' }}><a href="{{ url_for('account.get_account') }}">Account</a></li> #}
+            <li class="nav-list__item">
+              <a class="nav-list__link" href="{{ url_for('account.logout') }}">Logout</a>
             </li>
           {% else %}
-            <li class="global-header__nav-item">
-              <a class="global-header__nav-link" href="{{ url_for('account.get_login') }}">Login</a>
+            <li class="nav-list__item">
+              <a class="nav-list__link" href="{{ url_for('account.get_login') }}">Login</a>
             </li>
           {% endif %}
         </ul>
-      </nav>
-
-      <nav class="global-header__bottom">
-      {% if props.currentPage == 'artists' %}
-        <ul class="subheader">
-          <li><a href="/artists">[Artist List]</a></li>
-          <li><a href="/artists/random">[Random Artist]</a></li>
-          <li>
-            <a href="/artists/updated">[Recently Updated Artists]</a>
-          </li>
-        </ul>
-      {% endif %}
-      {% if props.currentPage == 'requests' %}
-        <ul class="subheader">
-          <li><a href="/requests">[Request List]</a></li>
-          <li><a href="/requests/new">[Post New Request]</a></li>
-        </ul>
-      {% endif %}
-      {% if request.endpoint == 'artists.get' %}
-        <ul class="subheader">
-          <li><a href="/posts/upload?service={{ props.service }}&user={{ props.id }}">[Upload file]</a></li>
-        </ul>
-      {% endif %}
       </nav>
       {% include 'components/flash_messages.html' %}
     </header>
@@ -124,7 +135,7 @@
     </main>
     <footer class="global-footer">
       <nav class="global-footer__navigation global-footer__navigation--hidden">
-        {{ nav_list("global-footer__navlist ") }}
+        {{ nav_list("nav-list--vertical ") }}
       </nav>
       <div class="global-footer__nav-switch">
         <button 

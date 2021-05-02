@@ -1,0 +1,12 @@
+{% macro image_link(src, alt=src, lazy=true) -%}
+  <a class="image-link" href="{{ src }}">
+    <picture class="image-link__picture">
+      <img 
+        class="image-link__image"
+        src="{{ src }}" 
+        alt="{{ alt }}"
+        loading="{{ 'lazy' if lazy is true else 'eager' }}"
+      >
+    </picture>
+  </a>
+{% endmacro %}

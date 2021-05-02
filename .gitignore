@@ -6,6 +6,7 @@ node_modules
 
 # VSCode workspace
 *.code-workspace
+.vscode
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
