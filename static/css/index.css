@@ -829,12 +829,6 @@ thead th {
   color: var(--colour0-primary);
 }
 
-.nav-list__item:focus-within > .nav-list__link,
-.nav-list__item:hover > .nav-list__link {
-  background-color: var(--colour0-tertiary);
-  border-color: inherit;
-}
-
 .nav-list__button {
   box-sizing: border-box;
   min-height: 44px;
