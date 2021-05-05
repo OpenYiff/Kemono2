@@ -1,0 +1,106 @@
+<!--Modal Stylesheet-->
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 99999; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(255,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+  
+/* Modal Header */
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #1D1F21;
+  margin: auto;
+  padding: 20px;
+  border: 5px solid #FFFF00;
+  width: 80%;
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+<!--OpenDaModal--->
+<body onload="myFunction()">
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">×</span>
+    <p style="text-align: center;"><big><big><big>!WARNING!</big></big></big><br>
+</p>
+<p style="text-align: center;"><big>This creator has been flagged to be
+DELETED and BANNED during the purge. This pop-up message is a warning
+to allow you to save whatever you want from this creator before they
+are deleted forever, being unable to be re-imported. See the Telegram
+group and homepage for the date of the purge. We give you ONE MONTH
+from initial warning until the purge, so be quick. Thanks for
+understanding and we hope you carry on enjoying kemono.party.</big></p>
+
+  </div>
+
+</div>
+<!--Da Modal Script-->
+<script>
+
+var modal = document.getElementById("myModal");
+
+
+var span = document.getElementsByClassName("close")[0];
+
+
+function myFunction() {
+  modal.style.display = "block";
+}
+	
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+	
+</script>
